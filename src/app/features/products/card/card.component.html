@@ -1,0 +1,9 @@
+<a class="block relative h-48 rounded overflow-hidden" [routerLink]="['/products', (product().id)]">
+    <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="{{product().image}}">
+</a>
+<div class="mt-4">
+    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{product().category}}</h3>
+    <h2 class="text-gray-900 title-font text-lg font-medium">{{product().title | slice : 0 : 30}}</h2>
+    <p class="mt-1 ">{{product().price | currency:'USD' }}</p>
+    <button class="px-2 py-1 text-white bg-orange-500 rounded hover:bg-orange-700" (click)="onAddToCart()">Add to cart</button>
+</div>
