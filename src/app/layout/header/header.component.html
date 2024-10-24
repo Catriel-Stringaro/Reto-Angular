@@ -4,14 +4,14 @@
       <span class="ml-3 text-xl">E-Commerce</span>
     </a>
     <nav class="md:ml-auto flex items-center text-base justify-center">
-      <a routerLink="/products" class="mr-6 hover:text-gray-900">Products</a>
+      <a  [routerLink]="['/products']" class="mr-6 hover:text-gray-900">Products</a>
 
       <!-- Cart Icon and Popup -->
       <div class="relative">
         <!-- Cart Icon -->
         <div class="w-6 h-6 flex items-center justify-center cursor-pointer" (mouseenter)="showCart.set(true)"
           (mouseleave)="showCart.set(false)">
-          <a routerLink="/checkout">
+          <a [routerLink]="['/checkout']">
             <svg fill="#000000" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
               viewBox="0 0 902.86 902.86">
               <g>
@@ -34,14 +34,14 @@
         </div>
 
         <!-- Cart Popup -->
-        @if (showCart()){
+        @if (showCart() && cartStore.productsCount()){
         <div [ngClass]="{'show-cart-animation': showCart()}"
           class="absolute right-0 z-30 w-48 p-4 mt-2 bg-slate-400 rounded-sm shadow-lg">
 
           @for (product of cartStore.products(); track $index) {
 
           <div class="flex items-center justify-between">
-            <span>{{product.qty}} - {{product.title}}</span>
+            <span>{{product.qty}} - {{product.title | slice : 0: 10}} {{product.subTotal || product.price | currency}}</span>
           </div>
           }
 

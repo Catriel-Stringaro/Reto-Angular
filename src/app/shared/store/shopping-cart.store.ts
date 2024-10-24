@@ -5,14 +5,10 @@ import { Product } from "../models/products.interface";
 
 export interface CartStore{
     products: Product[];
-    totalAmount: number;
-    productsCount: number;
 }
 
 const initialState: CartStore = {
-    products:[],
-    totalAmount: 0,
-    productsCount: 0,
+    products:[]
 };
 
 export const CartStore = signalStore(
@@ -24,7 +20,14 @@ export const CartStore = signalStore(
     })),
     withMethods(({products, ...store}) => ({
         addToCart(product: Product) {
-            patchState(store, { products: [...products(), product] });
+            const isProductInCart = products().find((item: Product) => item.id === product.id);
+            if(isProductInCart){
+                isProductInCart.qty++;
+                isProductInCart.subTotal = isProductInCart.qty * isProductInCart.price;
+                patchState(store, { products: [...products()] });
+            }else{
+                patchState(store, { products: [...products(), product] });
+            }
         },
         removeFromCart(id: number){
             const updateProducts = products().filter(product => product.id != id);
@@ -36,13 +39,14 @@ export const CartStore = signalStore(
     })),
 )
 function calculateTotalAmount(products: Product[]) : number {
-    let value = products.reduce((acc, product) => acc + product.price, 0);
+    let value = products.reduce((acc, product) => acc + product.price * product.qty, 0);
+    console.log("calculateTotalAmount",value)
     return value
 }
 function calculateProductCount(products: Product[]): number {
     const value = products.reduce((acc, product) => {
         return acc + product.qty;
     }, 0);
-
+    console.log("calculateProductCount",value)
     return value;
 }
